@@ -8,14 +8,13 @@ export const addPost = async (req, res) => {
             return res.json({ isSuccess: false, message: 'userId and content are required' });
         }
 
-        const createdAt = Date.now();
-        const updatedAt = Date.now();
+        const timeStamp = Date.now();
 
         const newPost = new postModel({
             userId,
             content,
-            createdAt,
-            updatedAt
+            createdAt: timeStamp,
+            updatedAt: timeStamp
         });
 
         const post = await newPost.save();
