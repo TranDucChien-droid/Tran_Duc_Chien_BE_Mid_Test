@@ -4,16 +4,17 @@ import {
     updatePost,
     getPostByID,
     getPosts,
-    removePost,
 } from '../controllers/postController.js';
-import { adminAuth } from '../middleware/adminAuth.js';
+import { userMiddleware } from '../middleware/userMiddleware.js';
 
 const postRoutes = express.Router();
 
+postRoutes.post('/posts', userMiddleware, addPost);
+postRoutes.put('/posts/:id', userMiddleware, updatePost);
+
+// Dùng để test - không cần middleware
 postRoutes.get('/get', getPosts);
 postRoutes.get('/get/:id', getPostByID);
-postRoutes.post('/add', adminAuth, addPost);
-postRoutes.put('/update/:id', adminAuth, updatePost);
-postRoutes.delete('/remove/:id', adminAuth, removePost);
+//====================================
 
 export default postRoutes;

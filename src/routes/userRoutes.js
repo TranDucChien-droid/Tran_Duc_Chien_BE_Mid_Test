@@ -1,16 +1,18 @@
 import express from 'express';
 import {
-    findAll,
-	loginAdmin,
+	findAll,
 	loginUser,
 	registerUser,
 } from '../controllers/userController.js';
 
 const userRoutes = express.Router();
 
-userRoutes.get('/findAllUsers', findAll);
 userRoutes.post('/register', registerUser);
 userRoutes.post('/login', loginUser);
-userRoutes.post('/admin/login', loginAdmin);
+
+
+// Dùng để test
+userRoutes.get('/findAllUsers', findAll);
+//====================================
 
 export default userRoutes;

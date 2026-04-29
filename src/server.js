@@ -4,7 +4,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import connectDB from './config/mongodb.js';
 import userRoutes from './routes/userRoutes.js';
-import productRoutes from './routes/productRoutes.js';
+import postRoutes from './routes/postRoutes.js';
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -19,12 +19,12 @@ app.get('/', (request, response) => {
 });
 
 app.use('/api/user', userRoutes);
-app.use('/api/product', productRoutes);
+app.use('/api/post', postRoutes);
 
 app.listen(port, async () => {
 	console.log('Server started on PORT : ' + port);
-	
-	// await productModel.updateMany(
+
+	// await postModel.updateMany(
 	// 	{}, // Find all documents
 	// 	{ $set: { isAdmin: false } } // Set the new field and value
 	// );
