@@ -1,7 +1,7 @@
 import validator from 'validator';
 import bcrypt from 'bcrypt';
 import userModel from '../models/userModel.js';
-import jwt from 'jsonwebtoken';
+import { generateApiKey } from '../config/utils.js';
 
 export const loginUser = async (req, res) => {
 	try {
@@ -25,11 +25,12 @@ export const loginUser = async (req, res) => {
 			});
 		}
 
-		const token = jwt.sign(
-			{ _id: user._id, isAdmin: user.isAdmin, email, password },
-			process.env.JWT_SECRET
-		);
-		res.json({ isSuccess: true, message: 'Login Success', token });
+		const { apiKey, randomString } = generateApiKey(user._id, email);
+
+		user.apiKeyRandom = randomString;
+		await user.save();
+
+		res.json({ isSuccess: true, message: 'Login Success', apiKey });
 	} catch (error) {
 		console.log('res error', error);
 		res.json({ isSuccess: false, message: error.message });

@@ -18,8 +18,8 @@ app.get('/', (request, response) => {
 	response.send('Work');
 });
 
-app.use('/api/user', userRoutes);
-app.use('/api/post', postRoutes);
+app.use('/users', userRoutes);
+app.use('/posts', postRoutes);
 
 app.listen(port, async () => {
 	console.log('Server started on PORT : ' + port);
