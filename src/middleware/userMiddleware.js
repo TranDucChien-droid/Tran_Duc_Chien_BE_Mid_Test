@@ -25,7 +25,6 @@ export const userMiddleware = async (req, res, next) => {
 			return res.json({ isSuccess: false, message: 'Invalid or expired apiKey' });
 		}
 
-		// Attach user info to request
 		req.user = userExists;
 
 		next();

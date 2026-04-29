@@ -44,11 +44,11 @@ export const registerUser = async (req, res) => {
 		const exists = await userModel.findOne({ email });
 
 		if (exists) {
-			return res.json({ isSuccess: false, message: 'User exists' });
+			return res.json({ isSuccess: false, message: 'User with this email already exists' });
 		}
 
 		if (!validator.isEmail(email)) {
-			return res.json({ isSuccess: false, message: 'Not Email' });
+			return res.json({ isSuccess: false, message: 'Invalid email format' });
 		}
 
 		// Hash password

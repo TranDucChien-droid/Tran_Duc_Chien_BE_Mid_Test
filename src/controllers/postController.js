@@ -1,14 +1,18 @@
+import { parseApiKey } from '../config/utils.js';
 import postModel from '../models/postModel.js';
 
 export const addPost = async (req, res) => {
     try {
-        const { userId, content } = req.body;
+		const { apiKey } = req.query;
+		const { userId } = parseApiKey(apiKey);
 
-        if (!userId || !content) {
-            return res.json({ isSuccess: false, message: 'userId and content are required' });
+        const { content } = req.body;
+
+        if (!content) {
+            return res.json({ isSuccess: false, message: 'content is required' });
         }
 
-        const timeStamp = Date.now();
+        const timeStamp = new Date().toString();
 
         const newPost = new postModel({
             userId,
@@ -27,14 +31,23 @@ export const addPost = async (req, res) => {
 export const updatePost = async (req, res) => {
     try {
         const { id } = req.params;
+        
+		const { apiKey } = req.query;
+		const { userId } = parseApiKey(apiKey);
+        
         const { content } = req.body;
 
         const existingPost = await postModel.findById(id);
+
         if (!existingPost) {
             return res.json({ isSuccess: false, message: 'Post not found' });
         }
 
-        const updatedAt = Date.now();
+        if (existingPost?.userId !== userId) {
+            return res.json({ isSuccess: false, message: 'Unauthorized to update this post' });
+        }
+
+        const updatedAt = new Date().toString();
 
         const post = await postModel.findByIdAndUpdate(
             id,
@@ -73,21 +86,6 @@ export const getPostByID = async (req, res) => {
         }
 
         res.json({ isSuccess: true, message: 'Post retrieved successfully', data: post });
-    } catch (error) {
-        res.json({ isSuccess: false, message: error.message });
-    }
-};
-
-export const removePost = async (req, res) => {
-    try {
-        const id = req.params.id || req.body.id;
-        const post = await postModel.findByIdAndDelete(id);
-
-        if (!post) {
-            return res.json({ isSuccess: false, message: 'Post not found' });
-        }
-
-        res.json({ isSuccess: true, message: 'Post removed successfully' });
     } catch (error) {
         res.json({ isSuccess: false, message: error.message });
     }
